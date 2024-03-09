@@ -1,1 +1,1 @@
-# lumiplan
+# LumiPlan
