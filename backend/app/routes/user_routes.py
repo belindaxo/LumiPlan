@@ -5,7 +5,7 @@ from flask_login import login_user
 user_bp = Blueprint('user_bp', __name__)
 
 
-@user_bp.route('/users', methods=['POST'])
+@user_bp.route('/register', methods=['POST'])
 def register_user():
     data = request.get_json()
     print(data)  # Add this line to debug
