@@ -5,11 +5,35 @@ import logo from '../logos/logo.png'; // Ensure this path is correct
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate('/home');
+
+    const cred = {
+      username,
+      password,
+    };
+
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json',
+        },
+        body: JSON.stringify(cred),
+      });
+
+      if (response.ok) {
+        navigate('/home');
+      } else {
+        const data = await response.json();
+        setErrorMessage(data.message || 'Invalid username or password.');
+      }
+    } catch (error) {
+        setErrorMessage('Network error: Could not connect to the server. Please try again later.');
+      }
   };
 
   const styles = {
@@ -56,16 +80,15 @@ function LoginPage() {
     },
   };
 
-  return (
+ return (
     <div style={styles.loginPage}>
       <img src={logo} alt="LumiPlan Logo" style={styles.logo} />
       <div style={styles.title}>LumiPlan</div>
+      {errorMessage && <div style={{ color: 'red', marginBottom: '10px' }}>{errorMessage}</div>}
       <form onSubmit={handleLogin} style={{ width: '100%', maxWidth: '330px' }}>
-        
         <input
           type="text"
           placeholder="Enter Username"
-          
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           style={styles.input}

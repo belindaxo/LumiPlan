@@ -5,18 +5,22 @@ from flask_login import LoginManager
 from config import DevelopmentConfig, TestingConfig, ProductionConfig, Config
 import os
 
+from flask_cors import CORS
+
+# Assuming 'app' is your Flask application
+
 bcrypt = Bcrypt()
 mongo = PyMongo()
 
 def create_app():
     app = Flask(__name__)
+    CORS(app, resources={r"/users": {"origins": "*"}}, supports_credentials=True)
 
-    # Initialize bcrypt and mongo with the app
-    bcrypt.init_app(app)
-    mongo.init_app(app)
+
 
     # Configuration setup based on environment
     env = os.getenv('FLASK_ENV', 'development')
+    print("environment " + env)
     if env == 'development':
         app.config.from_object(DevelopmentConfig)
     elif env == 'testing':
@@ -25,6 +29,11 @@ def create_app():
         app.config.from_object(ProductionConfig)
     else:
         app.config.from_object(Config)
+    
+    # Initialize bcrypt and mongo with the app
+    bcrypt.init_app(app)
+    mongo.init_app(app)
+
 
     login_manager = LoginManager()
     login_manager.init_app(app)

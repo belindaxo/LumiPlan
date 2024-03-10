@@ -6,12 +6,37 @@ function RegisterPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Placeholder for backend registration logic
-    navigate('/home');
+    
+    const formData = {
+        username,
+        email,
+        password,
+    };
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json',
+            },
+            body: JSON.stringify(formData),            
+        });
+        if (response.status === 201) {
+            navigate('/home');
+        } else if (response.status === 400) {
+            const data = await response.json();
+            setErrorMessage(data.message || 'An error occurred during registration.');
+        } else {
+            setErrorMessage('An unexpected error occurred. Please try again.');
+        }
+    } catch (error) {
+        setErrorMessage('Network error: Could not connect to the server. Please try again.');
+    }
   };
 
   const styles = {
@@ -60,9 +85,11 @@ function RegisterPage() {
     },
   };
 
-  return (
-    <div style={styles.registerPage}>
+
+  return ( // This return statement was missing
+  <div style={styles.registerPage}>
       <img src={logo} alt="LumiPlan Logo" style={styles.logo} />
+      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
       <div style={styles.formTitle}>LumiPlan</div>
       <form onSubmit={handleRegister} style={{ width: '100%', maxWidth: '330px' }}>
         <input
@@ -91,8 +118,8 @@ function RegisterPage() {
         />
         <button type="submit" style={styles.button}>Register</button>
       </form>
-    </div>
-  );
+  </div>
+);
 }
 
 export default RegisterPage;

@@ -3,7 +3,7 @@ import os
 class Config:
     DEBUG = False
     TESTING = False
-    MONGO_URI = os.getenv('MONGO_URI', 'mongodb+srv://belindaxo:v2jaVeyap7zF@lumiplan.bpe9jda.mongodb.net/')
+    MONGO_URI = os.getenv('MONGO_URI', 'mongodb+srv://belindaxo:v2jaVeyap7zF@lumiplan.bpe9jda.mongodb.net/TaskManager?retryWrites=true&w=majority')
 
 class DevelopmentConfig(Config):
     DEBUG = True
