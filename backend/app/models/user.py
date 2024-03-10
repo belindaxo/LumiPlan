@@ -27,6 +27,7 @@ class User(UserMixin):
         user = User(username, email, password_hash)
         try:
             # Attempt to insert the user into the database
+            print(mongo)
             result = mongo.db.users.insert_one(user.to_json())
             if result.inserted_id:
                 return user  # Valid use of return within the method
