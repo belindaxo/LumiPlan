@@ -1,15 +1,21 @@
 from flask import Flask
 from flask_pymongo import PyMongo
+from flask_bcrypt import Bcrypt  # Add this import
 from flask_login import LoginManager
 from config import DevelopmentConfig, TestingConfig, ProductionConfig, Config
-from bson.objectid import ObjectId
-from app.models.user import User
 import os
+
+bcrypt = Bcrypt()
+mongo = PyMongo()
 
 def create_app():
     app = Flask(__name__)
 
-    # Determine the configuration to use based on the FLASK_ENV environment variable
+    # Initialize bcrypt and mongo with the app
+    bcrypt.init_app(app)
+    mongo.init_app(app)
+
+    # Configuration setup based on environment
     env = os.getenv('FLASK_ENV', 'development')
     if env == 'development':
         app.config.from_object(DevelopmentConfig)
@@ -18,14 +24,11 @@ def create_app():
     elif env == 'production':
         app.config.from_object(ProductionConfig)
     else:
-        app.config.from_object(Config)  # Or handle as an error
-
-    mongo = PyMongo(app)
+        app.config.from_object(Config)
 
     login_manager = LoginManager()
     login_manager.init_app(app)
 
-    # User loader function
     @login_manager.user_loader
     def load_user(user_id):
         user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
@@ -33,7 +36,7 @@ def create_app():
             return None
         return User(user['username'], user['email'], user['password_hash'], user['_id'])
 
-    # Import and register blueprints
+    # Blueprint registration
     from app.routes.user_routes import user_bp
     from app.routes.task_routes import task_bp
     from app.routes.tag_routes import tag_bp
