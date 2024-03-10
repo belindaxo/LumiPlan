@@ -1,19 +1,24 @@
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
+  const isAuthenticated = false; // Placeholder for authentication logic
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <div className="App-header-buttons">
-          <button>Login</button>
-          <button>Register</button>
-        </div>
-      </header>
-      <div className="App-body">
-        {/* Calendar view and task panel will go here */}
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <LoginPage />} />
+          <Route path="/register" element={isAuthenticated ? <Navigate to="/home" /> : <RegisterPage />} />
+          {/* Add more routes as needed */}
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 
