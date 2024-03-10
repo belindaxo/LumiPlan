@@ -8,5 +8,8 @@
         "test_*.py"
     ],
     "python.testing.pytestEnabled": true,
-    "python.testing.unittestEnabled": true
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestArgs": [
+        "backend"
+    ]
 }

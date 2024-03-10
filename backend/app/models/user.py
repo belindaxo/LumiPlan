@@ -36,8 +36,7 @@ class User(UserMixin):
 
     @staticmethod
     def get_user_by_username(username):
-        from app import mongo  
-        user_data = mongo.db.users.find_one({"username": username})
-        if user_data:
+        from app import mongo
+        if user_data := mongo.db.users.find_one({"username": username}):
             return User(user_data['username'], user_data['email'], user_data['password_hash'], user_data['_id'])
         return None
