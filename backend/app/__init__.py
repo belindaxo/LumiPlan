@@ -14,8 +14,7 @@ mongo = PyMongo()
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, resources={r"/users": {"origins": "*"}}, supports_credentials=True)
-
+    CORS(app)
 
 
     # Configuration setup based on environment

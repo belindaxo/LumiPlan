@@ -7,9 +7,14 @@ user_bp = Blueprint('user_bp', __name__)
 
 @user_bp.route('/users', methods=['POST'])
 def register_user():
-    # Extract user info from request
     data = request.get_json()
-    user = User.create_user(data['username'], data['email'], data['password_hash'])
+    print(data)  # Add this line to debug
+
+    if not data or 'username' not in data or 'email' not in data or 'password' not in data:
+        return jsonify({"error": "Missing username, email, or password"}), 400
+    # Extract user info from request
+    # Use 'password' key instead of 'password_hash'
+    user = User.create_user(data['username'], data['email'], data['password'])  # Change here
     if user:
         return jsonify({"message": "User created successfully"}), 201
     else:

@@ -22,10 +22,19 @@ class User(UserMixin):
 
     @staticmethod
     def create_user(username, email, password):
-        user = User(username, email, User.set_password(password))
-        result = mongo.db.users.insert_one(user.to_json())
-        user._id = result.inserted_id  # Ensure the user object has the new _id after insertion
-        return user
+        # This method is clearly within the User class context
+        password_hash = User.set_password(password)  # Hash the password
+        user = User(username, email, password_hash)
+        try:
+            # Attempt to insert the user into the database
+            result = mongo.db.users.insert_one(user.to_json())
+            if result.inserted_id:
+                return user  # Valid use of return within the method
+        except Exception as e:
+            print(f"Error creating user: {e}")
+        return None  # Also a valid use of return within the method
+
+
 
     def to_json(self):
         return {
