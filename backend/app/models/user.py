@@ -7,3 +7,4 @@ def create_user(username, email, password_hash):
         "password_hash": password_hash,
     }
     mongo.db.users.insert_one(user)
+    return user
