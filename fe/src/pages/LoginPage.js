@@ -19,7 +19,7 @@ function LoginPage() {
       justifyContent: 'center',
       alignItems: 'center',
       padding: '20px',
-      height: '100vh',
+      height: '545px',
       backgroundColor: '#F1FAEE',
       fontFamily: "'Dangrek', cursive",
     },

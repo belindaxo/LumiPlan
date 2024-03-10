@@ -21,7 +21,7 @@ function RegisterPage() {
       justifyContent: 'center',
       alignItems: 'center',
       padding: '20px',
-      height: '100vh',
+      height: '545px',
       backgroundColor: '#F1FAEE', // Custom background color
       fontFamily: "'Dangrek', cursive", // Applying Dangrek font
     },

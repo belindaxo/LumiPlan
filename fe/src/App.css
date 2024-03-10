@@ -4,6 +4,15 @@
 .App {
   text-align: center;
 }
+.rbc-calendar, .rbc-calendar * {
+  font-family: 'Dangrek', cursive !important;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 
 .App-header {
   background-color: #457B9D;
