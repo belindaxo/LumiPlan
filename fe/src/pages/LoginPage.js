@@ -25,9 +25,9 @@ function LoginPage() {
         body: JSON.stringify(cred),
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         navigate('/home');
-      } else {
+      } else if (response.status === 401) {
         const data = await response.json();
         setErrorMessage(data.message || 'Invalid username or password.');
       }
@@ -83,8 +83,8 @@ function LoginPage() {
  return (
     <div style={styles.loginPage}>
       <img src={logo} alt="LumiPlan Logo" style={styles.logo} />
-      <div style={styles.title}>LumiPlan</div>
       {errorMessage && <div style={{ color: 'red', marginBottom: '10px' }}>{errorMessage}</div>}
+      <div style={styles.title}>LumiPlan</div>
       <form onSubmit={handleLogin} style={{ width: '100%', maxWidth: '330px' }}>
         <input
           type="text"
