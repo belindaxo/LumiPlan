@@ -42,7 +42,7 @@ def create_app():
         user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
         if not user:
             return None
-        return User(user['username'], user['email'], user['password_hash'], user['_id'])
+        return User(user['username'], user['email'], user['password_hash'], user['tasks'], user['_id'])
 
     # Blueprint registration
     from app.routes.user_routes import user_bp

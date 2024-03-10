@@ -6,9 +6,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
-function HomePage() {
+function HomePage({route, navigation}) {
+  const location = useLocation()
+  const user = location.state?.user;
+  console.log(JSON.stringify(user))
   const [tasks, setTasks] = useState([]);
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
   const [newTask, setNewTask] = useState({ title: '', deadline: new Date(), completed: false });
@@ -17,13 +22,64 @@ function HomePage() {
   const localizer = momentLocalizer(moment); // Add this line
   const [calendarView, setCalendarView] = useState('month'); // Add this line
 
+  useEffect(() => {
+    // Define an async function inside the useEffect
 
 
-  const addTask = () => {
-    setTasks([...tasks, newTask]);
-    setNewTask({ title: '',  deadline: new Date(), completed: false }); // Reset new task state
-    setShowModal(false); // Close modal
+    const fetchTasks = async () => {
+      if (!user) return; // If there is no user data, do not fetch tasks
+
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/tasks/${user.username}`, {
+          method: 'GET'
+        });
+
+        if (response.ok) {
+          const fetchedTasks = await response.json();
+          setTasks(fetchedTasks); // Set the fetched tasks
+        } else {
+          // Handle non-2xx responses
+          console.error('Failed to fetch tasks');
+        }
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
+    };
+
+
+
+    fetchTasks();
+  }, [user]); // Dependency array, re-run if `user` changes
+
+  // Rest of your component...
+
+  const addTask = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/add_task`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...newTask,
+          user_id: user.username, // Assuming user_id is the username; adjust as necessary
+        }),
+        mode: "no-cors"
+      });
+  
+      if (response.status === 200) {
+        const addedTask = await response.json();
+        setTasks([...tasks, addedTask]);
+        setNewTask({ title: '', deadline: new Date(), completed: false }); // Reset new task state
+        setShowModal(false); // Close modal
+      } else if (response.status === 400) {
+        console.error('Failed to add task');
+      }
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
   };
+  
   const handleChatWithLumi = () => {
   console.log("Chat with Lumi feature coming soon!");
   // Or, use an alert to inform the user

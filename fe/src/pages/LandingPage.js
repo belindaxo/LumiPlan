@@ -10,9 +10,7 @@ function LandingPage() {
       justifyContent: 'center',
       alignItems: 'center',
       padding: '20px',
-      backgroundColor: '#F1FAEE', // Custom background color
       color: '#1D3557', // Dark blue text color
-      height: '545px' ,
       fontFamily: "'Dangrek', cursive", // Applying Dangrek font
     },
     logo: {

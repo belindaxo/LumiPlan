@@ -32,6 +32,22 @@ def login():
         # Here, you would typically set up the user session or token
         # For simplicity, we'll just return a success response
         login_user(user)  # This logs in the user with Flask-Login
-        return jsonify({"message": "Login successful"}), 200
+        return jsonify({"message": "Login successful", "user" : user.to_json()}), 200
     else:
         return jsonify({"message": "Invalid username or password"}), 401
+    
+@user_bp.route('/add_task', methods=['POST'])
+def add_task():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    task = data.get('task')
+
+    user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    try:
+        mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$push": {"tasks": task}})
+        return jsonify({"message": "Task added successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400

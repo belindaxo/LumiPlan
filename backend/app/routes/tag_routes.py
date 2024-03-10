@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.models.tag import create_tag, get_tags, delete_tag
+from app import mongo
 
 tag_bp = Blueprint('tag_bp', __name__)
 

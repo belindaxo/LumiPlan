@@ -26,7 +26,8 @@ function LoginPage() {
       });
 
       if (response.status === 200) {
-        navigate('/home');
+        const user = await response.json(); // Assuming this is the user's data
+        navigate('/home', { state: { user } });
       } else if (response.status === 401) {
         const data = await response.json();
         setErrorMessage(data.message || 'Invalid username or password.');
@@ -43,8 +44,6 @@ function LoginPage() {
       justifyContent: 'center',
       alignItems: 'center',
       padding: '20px',
-      height: '545px',
-      backgroundColor: '#F1FAEE',
       fontFamily: "'Dangrek', cursive",
     },
     logo: {

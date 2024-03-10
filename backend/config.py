@@ -4,6 +4,7 @@ class Config:
     DEBUG = False
     TESTING = False
     MONGO_URI = os.getenv('MONGO_URI', 'mongodb+srv://belindaxo:ORspxgwlgUOxeTWx@lumiplan.bpe9jda.mongodb.net/db')
+    SECRET_KEY = 'belindasuha123oooooooo'
 
 class DevelopmentConfig(Config):
     DEBUG = True
