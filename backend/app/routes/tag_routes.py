@@ -12,7 +12,7 @@ def add_tag():
 @tag_bp.route('/tags/<user_id>', methods=['GET'])
 def list_tags(user_id):
     tags = get_tags(user_id)
-    return jsonify(tags), 200
+    return jsonify([tags]), 200
 
 @tag_bp.route('/tags/<tag_id>', methods=['DELETE'])
 def remove_tag(tag_id):
